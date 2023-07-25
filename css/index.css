@@ -1,0 +1,106 @@
+:root {
+	--bg-color: #000;
+	--fg-color: #fff;
+	--sun-mobile-size: 150px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	height: 100vh;
+	width: 100vw;
+	background-color: var(--bg-color);
+	overflow: hidden;
+}
+main {
+	height: 100vh;
+	width: 100vw;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+}
+@keyframes scale-in {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: scale(1);
+	}
+}
+.wrapper {
+	/* animation: scale-in 5s ease-in-out; */
+}
+.star {
+	position: absolute;
+	width: 2px;
+	height: 2px;
+	background-color: var(--fg-color);
+	border-radius: 50%;
+	transition: background-color 0.3s ease-in;
+}
+.star-twinkle {
+	animation: twinkle 4s linear infinite;
+}
+@keyframes twinkle {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+.wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.sun {
+	width: var(--sun-mobile-size);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+}
+.wrapper-earth {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(105, 105, 105, 0.356);
+	position: absolute;
+	z-index: 1;
+	display: flex;
+	flex-direction: row-reverse;
+}
+
+.earth {
+	width: 100%;
+	max-width: 100px;
+	max-height: 100px;
+}
+@keyframes rotate-earth {
+	from {
+		transform: rotate(360deg);
+	}
+	to {
+	}
+}
+.moon {
+	width: 100%;
+	max-width: 40px;
+	max-height: 40px;
+}
+@keyframes rotate-moon {
+	from {
+		transform: rotate(-360deg);
+	}
+	to {
+	}
+}
