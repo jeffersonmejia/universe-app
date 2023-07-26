@@ -2,9 +2,16 @@ const d = document,
 	w = window,
 	$main = d.querySelector('main'),
 	$wrapper = d.querySelector('.wrapper'),
-	$sun = d.querySelector('.sun-hidden')
+	$sun = d.querySelector('.sun-hidden'),
+	$dialog = d.querySelector('.dialog-fixed')
 
-const ORBIT_TIME_DIFFERENCE = 10
+const NUM_STARS = 280
+
+function createSun() {
+	$sun.classList.remove('sun-hidden')
+	$sun.classList.add('sun')
+	$sun.setAttribute('data-rotation', '25 a 36')
+}
 
 function createStars(numStars) {
 	const colors = ['#FFD700', '#FFA500', '#FF4500', '#fff']
@@ -32,47 +39,67 @@ function createPlanets() {
 	const planets = [
 		{
 			name: 'mercury',
+			['number-es']: 'primer',
+			['name-es']: 'Mercurio',
 			size: 15,
 			orbitTime: 88,
+			rotationTime: 58.6,
 		},
 		{
 			name: 'venus',
+			['number-es']: 'segundo',
+			['name-es']: 'Venus',
 			size: 20,
 			orbitTime: 225,
+			rotationTime: 243,
 		},
 		{
 			name: 'earth',
+			['number-es']: 'tercer',
+			['name-es']: 'La Tierra',
 			size: 30,
-			orbitTime: 365,
+			orbitTime: 365.25,
+			rotationTime: 1,
 		},
 		{
 			name: 'mars',
+			['number-es']: 'cuarto',
+			['name-es']: 'Marte',
 			size: 25,
 			orbitTime: 687,
+			rotationTime: 1.03,
 		},
 		{
 			name: 'jupiter',
-			distance: [0, 1],
+			['number-es']: 'quinto',
+			['name-es']: 'Júpiter',
 			size: 40,
 			orbitTime: 4362,
+			rotationTime: 0.41,
 		},
 		{
 			name: 'saturn',
-			distance: [0, 1],
+			['number-es']: 'sexto',
+			['name-es']: 'Saturno',
 			size: 35,
 			orbitTime: 10759,
+			rotationTime: 0.45,
 		},
 		{
 			name: 'uranus',
-			distance: [0, 1],
+			['number-es']: 'séptimo',
+			['name-es']: 'Urano',
 			size: 30,
 			orbitTime: 30687,
+			rotationTime: 0.72,
 		},
 		{
 			name: 'neptune',
-			distance: [0, 1],
+			['number-es']: 'octavo',
+			['name-es']: 'Neptuno',
 			size: 25,
 			orbitTime: 60190,
+			rotationTime: 0.67,
 		},
 	]
 
@@ -84,9 +111,10 @@ function createPlanets() {
 		$outline = d.createElement('div'),
 		$name = d.createElement('p')
 
-	$planet.appendChild($name)
+	//	$planet.appendChild($name)
 	$outline.appendChild($planet)
 
+	let planetZindex = planets.length
 	planets.forEach((planet, index) => {
 		if (window.innerWidth <= 530) MAX_PLANETS = 4
 		if (index >= MAX_PLANETS) return
@@ -101,8 +129,11 @@ function createPlanets() {
 			planetOutlineSize += 15
 		}
 		$clone.style.width = `${planetOutlineSize}px`
-		$clone.style.height = `${planetOutlineSize}px`
+		$clone.style.height = `${planetOutlineSize - 40}px`
 		planetOutlineSize += 60
+
+		$clone.style.zIndex = planetZindex
+		planetZindex -= 1
 
 		let $img = $clone.querySelector('div')
 		$img.style.backgroundImage = `url(assets/${planet.name}.png)`
@@ -111,7 +142,11 @@ function createPlanets() {
 
 		$img.style.width = `${planet.size}px`
 		$img.style.height = `${planet.size}px`
-		$img.setAttribute('aria-label', `${planet.name} - ${planet.orbitTime} días`)
+		$img.setAttribute('data-name-es', planet['name-es'])
+
+		$img.setAttribute('data-number-es', planet['number-es'])
+		$img.setAttribute('data-orbit', planet.orbitTime)
+		$img.setAttribute('data-rotation', planet.rotationTime)
 
 		// let name = $clone.querySelector('p')
 		// name.textContent = planet.name
@@ -121,20 +156,35 @@ function createPlanets() {
 }
 
 d.addEventListener('DOMContentLoaded', (e) => {
-	setTimeout(() => {
-		$sun.classList.remove('sun-hidden')
-		$sun.classList.add('sun')
-	}, 1000)
-	setTimeout(() => createStars(280), 4000)
+	setTimeout(() => createSun(), 1000)
+	setTimeout(() => createStars(NUM_STARS), 4000)
 	setTimeout(() => createPlanets(), 8000)
 })
+d.addEventListener('click', (e) => {
+	if (e.target.closest('.planet-wrapper div')) {
+		const $title = $dialog.querySelector('h3')
+		const $text = $dialog.querySelector('p')
+		const planet = e.target.dataset
 
-d.addEventListener('visibilitychange', (e) => {
-	$main.querySelectorAll('star-twinkle').forEach((el) => {
-		if (d.hidden) {
-			el.classList.remove('star-twinkle')
-		} else {
-			el.classList.add('star-twinkle')
-		}
-	})
+		const name = planet.nameEs
+		const number = planet.numberEs
+		const orbitTime = planet.orbit
+		const rotationTime = planet.rotation
+		const day = rotationTime <= 1 ? 'día' : 'días'
+
+		$title.textContent = name
+		$text.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
+		$dialog.classList.remove('hidden')
+	}
+	if (e.target.matches('.sun')) {
+		const $title = $dialog.querySelector('h3')
+		const $text = $dialog.querySelector('p')
+		const sun = e.target.dataset
+
+		$title.textContent = 'El sol'
+		$text.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
+	}
+	if (e.target.matches('.dialog-fixed button')) {
+		$dialog.classList.add('hidden')
+	}
 })
