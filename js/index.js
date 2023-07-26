@@ -104,7 +104,7 @@ function createPlanets() {
 		planetOutlineSize += 60
 
 		let $img = $clone.querySelector('div')
-		$img.style.backgroundImage = `url(../assets/${planet.name}.png)`
+		$img.style.backgroundImage = `url(assets/${planet.name}.png)`
 
 		$img.style.animation = `${planet.name}-orbit ${planet.orbitTime}s linear infinite`
 
