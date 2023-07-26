@@ -75,19 +75,20 @@ function createPlanets() {
 			orbitTime: 60190,
 		},
 	]
+
+	const $template = d.createElement('template')
+	let planetOutlineSize = 140
+	let MAX_PLANETS = planets.length
+
 	const $planet = d.createElement('div'),
 		$outline = d.createElement('div'),
 		$name = d.createElement('p')
 
 	$planet.appendChild($name)
 	$outline.appendChild($planet)
-	const $template = d.createElement('template')
-	let planetOutlineSize = 140
 
-	let MAX_PLANETS = planets.length
 	planets.forEach((planet, index) => {
 		if (window.innerWidth <= 530) MAX_PLANETS = 4
-
 		if (index >= MAX_PLANETS) return
 		let $clone = $outline.cloneNode(true)
 
@@ -110,7 +111,7 @@ function createPlanets() {
 
 		$img.style.width = `${planet.size}px`
 		$img.style.height = `${planet.size}px`
-		$img.setAttribute('arial-label', planet.orbitTime)
+		$img.setAttribute('aria-label', `${planet.name} - ${planet.orbitTime} días`)
 
 		// let name = $clone.querySelector('p')
 		// name.textContent = planet.name
