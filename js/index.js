@@ -2,14 +2,14 @@ const d = document,
 	w = window,
 	$main = d.querySelector('main'),
 	$wrapper = d.querySelector('.wrapper'),
-	$wrapperEarth = d.createElement('div'),
-	$earth = d.createElement('img'),
-	$moon = d.createElement('img'),
-	$sun = d.createElement('img')
+	$sun = d.querySelector('.sun-hidden')
+
+const ORBIT_TIME_DIFFERENCE = 10
 
 function createStars(numStars) {
 	const colors = ['#FFD700', '#FFA500', '#FF4500', '#fff']
 	const numStarsWithColor = Math.floor(numStars * 0.05)
+	const $template = d.createElement('template')
 
 	for (let i = 0; i < numStars; i++) {
 		const $star = d.createElement('div')
@@ -23,42 +23,109 @@ function createStars(numStars) {
 			const randomColor = colors[Math.floor(Math.random() * colors.length)]
 			$star.style.backgroundColor = randomColor
 		}
-		$main.appendChild($star)
+		$template.content.appendChild($star)
 	}
+	$main.appendChild($template.content)
 }
 
-function createMoon() {
-	$moon.classList.add('moon')
-	$moon.src = '../assets/moon.png'
-	$wrapperEarth.appendChild($moon)
-}
+function createPlanets() {
+	const planets = [
+		{
+			name: 'mercury',
+			size: 15,
+			orbitTime: 88,
+		},
+		{
+			name: 'venus',
+			size: 20,
+			orbitTime: 225,
+		},
+		{
+			name: 'earth',
+			size: 30,
+			orbitTime: 365,
+		},
+		{
+			name: 'mars',
+			size: 25,
+			orbitTime: 687,
+		},
+		{
+			name: 'jupiter',
+			distance: [0, 1],
+			size: 40,
+			orbitTime: 4362,
+		},
+		{
+			name: 'saturn',
+			distance: [0, 1],
+			size: 35,
+			orbitTime: 10759,
+		},
+		{
+			name: 'uranus',
+			distance: [0, 1],
+			size: 30,
+			orbitTime: 30687,
+		},
+		{
+			name: 'neptune',
+			distance: [0, 1],
+			size: 25,
+			orbitTime: 60190,
+		},
+	]
+	const $planet = d.createElement('div'),
+		$outline = d.createElement('div'),
+		$name = d.createElement('p')
 
-function createEarth() {
-	$wrapper.appendChild($wrapperEarth)
-	$earth.classList.add('earth')
-	$earth.src = '../assets/earth.png'
-	$wrapperEarth.classList.add('wrapper-earth')
-	$wrapperEarth.appendChild($earth)
-}
+	$planet.appendChild($name)
+	$outline.appendChild($planet)
+	const $template = d.createElement('template')
+	let planetOutlineSize = 140
 
-function createSun() {
-	$sun.classList.add('sun')
-	$sun.src = '../assets/sun.png'
-	$wrapper.appendChild($sun)
-}
+	let MAX_PLANETS = planets.length
+	planets.forEach((planet, index) => {
+		if (window.innerWidth <= 530) MAX_PLANETS = 4
 
-function rotateEarth() {
-	const sun = $sun.getBoundingClientRect()
-	const wrapper = $wrapper.getBoundingClientRect()
-	const centerPlanetX = sun.left - sun.right
+		if (index >= MAX_PLANETS) return
+		let $clone = $outline.cloneNode(true)
+
+		$clone.classList.add('planet-wrapper', `${planet.name}-outline`)
+
+		if (planet.name === 'saturn' || planet.name === 'uranus') {
+			planetOutlineSize += 30
+		}
+		if (planet.name === 'neptune') {
+			planetOutlineSize += 15
+		}
+		$clone.style.width = `${planetOutlineSize}px`
+		$clone.style.height = `${planetOutlineSize}px`
+		planetOutlineSize += 60
+
+		let $img = $clone.querySelector('div')
+		$img.style.backgroundImage = `url(../assets/${planet.name}.png)`
+
+		$img.style.animation = `${planet.name}-orbit ${planet.orbitTime}s linear infinite`
+
+		$img.style.width = `${planet.size}px`
+		$img.style.height = `${planet.size}px`
+		$img.setAttribute('arial-label', planet.orbitTime)
+
+		// let name = $clone.querySelector('p')
+		// name.textContent = planet.name
+		$template.content.appendChild($clone)
+	})
+	$wrapper.appendChild($template.content)
 }
 
 d.addEventListener('DOMContentLoaded', (e) => {
-	createStars(280)
-	createSun()
-	createEarth()
-	createMoon()
-	rotateEarth()
+	setTimeout(() => {
+		$sun.classList.remove('sun-hidden')
+		$sun.classList.add('sun')
+	}, 1000)
+	setTimeout(() => createStars(280), 4000)
+	setTimeout(() => createPlanets(), 8000)
 })
 
 d.addEventListener('visibilitychange', (e) => {
