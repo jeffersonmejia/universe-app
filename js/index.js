@@ -6,6 +6,7 @@ const d = document,
 	$dialog = d.querySelector('.dialog-fixed')
 
 const NUM_STARS = 280
+let isPlanetsLoaded = false
 
 function createSun() {
 	$sun.classList.remove('sun-hidden')
@@ -129,7 +130,7 @@ function createPlanets() {
 			planetOutlineSize += 15
 		}
 		$clone.style.width = `${planetOutlineSize}px`
-		$clone.style.height = `${planetOutlineSize - 40}px`
+		$clone.style.height = `${planetOutlineSize - 20}px`
 		planetOutlineSize += 60
 
 		$clone.style.zIndex = planetZindex
@@ -153,6 +154,7 @@ function createPlanets() {
 		$template.content.appendChild($clone)
 	})
 	$wrapper.appendChild($template.content)
+	isPlanetsLoaded = true
 }
 
 d.addEventListener('DOMContentLoaded', (e) => {
@@ -161,10 +163,13 @@ d.addEventListener('DOMContentLoaded', (e) => {
 	setTimeout(() => createPlanets(), 8000)
 })
 d.addEventListener('click', (e) => {
+	if (!isPlanetsLoaded) return
 	if (e.target.closest('.planet-wrapper div')) {
 		const $title = $dialog.querySelector('h3')
 		const $text = $dialog.querySelector('p')
 		const planet = e.target.dataset
+		$title.classList.add('opacity-off')
+		$text.classList.add('opacity-off')
 
 		const name = planet.nameEs
 		const number = planet.numberEs
@@ -172,17 +177,28 @@ d.addEventListener('click', (e) => {
 		const rotationTime = planet.rotation
 		const day = rotationTime <= 1 ? 'día' : 'días'
 
-		$title.textContent = name
-		$text.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
+		setTimeout(() => {
+			$title.textContent = name
+			$text.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
+			$title.classList.remove('opacity-off')
+			$text.classList.remove('opacity-off')
+		}, 500)
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.sun')) {
 		const $title = $dialog.querySelector('h3')
 		const $text = $dialog.querySelector('p')
+		$title.classList.add('opacity-off')
+		$text.classList.add('opacity-off')
 		const sun = e.target.dataset
 
-		$title.textContent = 'El sol'
-		$text.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
+		setTimeout(() => {
+			$title.textContent = 'El sol'
+			$text.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
+			$title.classList.remove('opacity-off')
+			$text.classList.remove('opacity-off')
+		}, 500)
+		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.dialog-fixed button')) {
 		$dialog.classList.add('hidden')
