@@ -204,9 +204,6 @@ div.neptune-outline > div {
 	text-align: justify;
 	text-justify: inter-word;
 }
-.dialog-fixed :is(h3, p) {
-	transition: opacity 0.3s ease-in-out;
-}
 
 .dialog-fixed .primary-button {
 	width: 80px;
@@ -224,9 +221,7 @@ div.neptune-outline > div {
 .hidden {
 	display: none;
 }
-.opacity-off {
-	opacity: 0;
-}
+
 @media screen and (min-width: 600px) {
 	body,
 	main {

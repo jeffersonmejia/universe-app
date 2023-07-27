@@ -168,8 +168,6 @@ d.addEventListener('click', (e) => {
 		const $title = $dialog.querySelector('h3')
 		const $text = $dialog.querySelector('p')
 		const planet = e.target.dataset
-		$title.classList.add('opacity-off')
-		$text.classList.add('opacity-off')
 
 		const name = planet.nameEs
 		const number = planet.numberEs
@@ -177,27 +175,18 @@ d.addEventListener('click', (e) => {
 		const rotationTime = planet.rotation
 		const day = rotationTime <= 1 ? 'día' : 'días'
 
-		setTimeout(() => {
-			$title.textContent = name
-			$text.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
-			$title.classList.remove('opacity-off')
-			$text.classList.remove('opacity-off')
-		}, 500)
+		$title.textContent = name
+		$text.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.sun')) {
 		const $title = $dialog.querySelector('h3')
 		const $text = $dialog.querySelector('p')
-		$title.classList.add('opacity-off')
-		$text.classList.add('opacity-off')
+
 		const sun = e.target.dataset
 
-		setTimeout(() => {
-			$title.textContent = 'El sol'
-			$text.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
-			$title.classList.remove('opacity-off')
-			$text.classList.remove('opacity-off')
-		}, 500)
+		$title.textContent = 'El sol'
+		$text.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.dialog-fixed button')) {
