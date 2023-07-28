@@ -14,6 +14,7 @@ body {
 	height: 100vh;
 	width: 100vw;
 	background-color: black;
+	font-family: 'Open Sans', sans-serif;
 }
 main {
 	height: 100vh;
@@ -190,7 +191,7 @@ div.neptune-outline > div {
 	width: 60px;
 	height: 55px;
 	border-radius: 50%;
-	border: 2px solid rgb(36, 36, 36);
+	border: 2px solid rgb(100, 100, 100);
 	transform: translate(-50%, -50%);
 	animation: opacity 0.3s ease-in-out;
 	z-index: 1;
@@ -205,6 +206,8 @@ div.neptune-outline > div {
 	left: 50%;
 	cursor: pointer;
 	z-index: 12;
+	box-shadow: inset 0px 0px 20px 15px rgba(0, 174, 255, 0.2),
+		0px 0px 20px 15px rgba(0, 174, 255, 0.2);
 }
 .earth-outline > .planet-img {
 	z-index: 999;
@@ -220,7 +223,7 @@ div.neptune-outline > div {
 .dialog-fixed {
 	width: 100%;
 	min-width: 280px;
-	max-width: 50vw;
+	max-width: 350px;
 	position: fixed;
 	right: 4vh;
 	bottom: 4vh;

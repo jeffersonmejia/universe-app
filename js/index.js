@@ -152,8 +152,6 @@ function createPlanets() {
 		$img.setAttribute('data-rotation', planet.rotationTime)
 		$img.classList.add('planet-img')
 
-		// let name = $clone.querySelector('p')
-		// name.textContent = planet.name
 		$template.content.appendChild($clone)
 	})
 	$wrapper.appendChild($template.content)
