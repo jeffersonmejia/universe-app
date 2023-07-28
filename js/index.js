@@ -3,7 +3,9 @@ const d = document,
 	$main = d.querySelector('main'),
 	$wrapper = d.querySelector('.wrapper'),
 	$sun = d.querySelector('.sun-hidden'),
-	$dialog = d.querySelector('.dialog-fixed')
+	$dialog = d.querySelector('.dialog-fixed'),
+	$dialogTitle = d.querySelector('.dialog-fixed h3'),
+	$dialogText = d.querySelector('.dialog-fixed p')
 
 const NUM_STARS = 280
 let isPlanetsLoaded = false
@@ -130,7 +132,7 @@ function createPlanets() {
 			planetOutlineSize += 15
 		}
 		$clone.style.width = `${planetOutlineSize}px`
-		$clone.style.height = `${planetOutlineSize - 20}px`
+		$clone.style.height = `${planetOutlineSize - 40}px`
 		planetOutlineSize += 60
 
 		$clone.style.zIndex = planetZindex
@@ -148,6 +150,7 @@ function createPlanets() {
 		$img.setAttribute('data-number-es', planet['number-es'])
 		$img.setAttribute('data-orbit', planet.orbitTime)
 		$img.setAttribute('data-rotation', planet.rotationTime)
+		$img.classList.add('planet-img')
 
 		// let name = $clone.querySelector('p')
 		// name.textContent = planet.name
@@ -157,36 +160,63 @@ function createPlanets() {
 	isPlanetsLoaded = true
 }
 
+function createMoon() {
+	const $earth = d.querySelector('.earth-outline div'),
+		$outline = d.createElement('div'),
+		$image = d.createElement('div')
+
+	const description = {
+		['name-es']: 'La Luna',
+		size: 10,
+		orbitTime: 27.3,
+		rotationTime: 27.3,
+	}
+
+	$outline.classList.add('moon-outline')
+	$image.style.backgroundImage = 'url(assets/moon.png)'
+	$image.style.width = `${description.size}px`
+	$image.style.height = `${description.size}px`
+	$image.style.animation = `moon-orbit ${description.orbitTime}s linear infinite`
+	$image.setAttribute('data-name', description['name-es'])
+	$image.setAttribute('data-orbit', description.orbitTime)
+	$image.setAttribute('data-rotation', description.rotationTime)
+
+	$outline.appendChild($image)
+	$earth.appendChild($outline)
+}
+
 d.addEventListener('DOMContentLoaded', (e) => {
 	setTimeout(() => createSun(), 1000)
 	setTimeout(() => createStars(NUM_STARS), 4000)
 	setTimeout(() => createPlanets(), 8000)
+	setTimeout(() => createMoon(), 10000)
 })
 d.addEventListener('click', (e) => {
 	if (!isPlanetsLoaded) return
-	if (e.target.closest('.planet-wrapper div')) {
-		const $title = $dialog.querySelector('h3')
-		const $text = $dialog.querySelector('p')
-		const planet = e.target.dataset
-
+	if (e.target.matches('.planet-img') || e.target.matches('.moon-outline')) {
+		const planet = e.target.matches('.moon-outline')
+			? e.target.parentElement.dataset
+			: e.target.dataset
 		const name = planet.nameEs
 		const number = planet.numberEs
 		const orbitTime = planet.orbit
 		const rotationTime = planet.rotation
 		const day = rotationTime <= 1 ? 'día' : 'días'
 
-		$title.textContent = name
-		$text.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
+		$dialogTitle.textContent = name
+		$dialogText.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
 		$dialog.classList.remove('hidden')
 	}
-	if (e.target.matches('.sun')) {
-		const $title = $dialog.querySelector('h3')
-		const $text = $dialog.querySelector('p')
-
+	if (e.target.closest('.sun')) {
 		const sun = e.target.dataset
-
-		$title.textContent = 'El sol'
-		$text.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
+		$dialogTitle.textContent = 'El sol'
+		$dialogText.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
+		$dialog.classList.remove('hidden')
+	}
+	if (e.target.matches('.moon-outline div')) {
+		const moon = e.target.dataset
+		$dialogTitle.textContent = 'La Luna'
+		$dialogText.textContent = `Es el único satélite natural de la Tierra y es uno de los objetos más familiares en el cielo nocturno. Tarda aproximadamente ${moon.orbit} días en orbitar la tierra y ${moon.rotation} días en rotar sobre su propio eje.`
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.dialog-fixed button')) {
