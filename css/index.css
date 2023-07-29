@@ -322,13 +322,8 @@ div.neptune-outline > div {
 	transition: box-shadow 0.3s ease-in-out;
 	box-shadow: -4px 0 12px 12px black;
 }
-@keyframes solar-eclipse {
-	from {
-		transform: rotate(0deg) translateX(28px) rotate(0deg) rotateZ(0deg);
-	}
-	to {
-		transform: rotate(-180deg) translateX(28px) rotate(180deg) rotateZ(360deg);
-	}
+.moon-outline .moon-eclipse-lunar {
+	box-shadow: -4px 0 50px 10px rgb(255 0 0);
 }
 .hidden {
 	display: none;

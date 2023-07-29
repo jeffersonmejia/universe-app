@@ -6,43 +6,15 @@ const d = document,
 	$dialog = d.querySelector('.dialog-fixed'),
 	$dialogTitle = d.querySelector('.dialog-fixed h3'),
 	$dialogText = d.querySelector('.dialog-fixed p'),
+	$dialogButton = $dialog.querySelector('button'),
 	$eventList = d.querySelector('.event-list'),
-	$eventsButton = d.querySelector('.events-button')
-
-const NUM_STARS = 280
-let isPlanetsLoaded = false,
-	isEclipseRunning = false
-
-function createSun() {
-	$sun.classList.remove('sun-hidden')
-	$sun.classList.add('sun')
-	$sun.setAttribute('data-rotation', '25 a 36')
-}
-
-function createStars(numStars) {
-	const colors = ['#FFD700', '#FFA500', '#FF4500', '#fff']
-	const numStarsWithColor = Math.floor(numStars * 0.05)
-	const $template = d.createElement('template')
-
-	for (let i = 0; i < numStars; i++) {
-		const $star = d.createElement('div')
-		$star.classList.add('star')
-		$star.classList.add('star-twinkle')
-		$star.style.left = `${Math.random() * 100}%`
-		$star.style.top = `${Math.random() * 100}%`
-		$star.style.animationDelay = `${Math.random() * 5}s`
-
-		if (i < numStarsWithColor) {
-			const randomColor = colors[Math.floor(Math.random() * colors.length)]
-			$star.style.backgroundColor = randomColor
-		}
-		$template.content.appendChild($star)
-	}
-	$main.appendChild($template.content)
-}
-
-function createPlanets() {
-	const planets = [
+	$eventsButton = d.querySelector('.events-button'),
+	$planetClone = d.createElement('div'),
+	$outlineClone = d.createElement('div'),
+	MAX_NUM_STARS = 280,
+	MAX_PLANETS_MOBILE = 4,
+	MOBILE_SIZE = 400,
+	planets = [
 		{
 			name: 'mercury',
 			['number-es']: 'primer',
@@ -107,57 +79,96 @@ function createPlanets() {
 			orbitTime: 60190,
 			rotationTime: 0.67,
 		},
+	],
+	listEvents = [
+		{
+			title: 'Eclipse Solar',
+			description:
+				'Durante un eclipse solar la luna se interpone entre el sol y la tierra creando una gigantesca sombra temporal.',
+		},
 	]
 
+let isPlanetsLoaded = false,
+	isEclipseRunning = false,
+	$earth = null,
+	$moon = null,
+	$listPlanets = null
+
+function createSun() {
+	$sun.classList.remove('sun-hidden')
+	$sun.classList.add('sun')
+	$sun.setAttribute('data-rotation', '25 a 36')
+}
+
+function createStars(numStars) {
+	const colors = ['#FFD700', '#FFA500', '#FF4500', '#fff']
+	const numStarsWithColor = Math.floor(numStars * 0.05)
 	const $template = d.createElement('template')
-	let planetOutlineSize = 140
-	let MAX_PLANETS = planets.length
 
-	const $planet = d.createElement('div'),
-		$outline = d.createElement('div'),
-		$name = d.createElement('p')
+	for (let i = 0; i < numStars; i++) {
+		const $star = d.createElement('div')
+		$star.classList.add('star')
+		$star.classList.add('star-twinkle')
+		$star.style.left = `${Math.random() * 100}%`
+		$star.style.top = `${Math.random() * 100}%`
+		$star.style.animationDelay = `${Math.random() * 5}s`
 
-	//	$planet.appendChild($name)
-	$outline.appendChild($planet)
+		if (i < numStarsWithColor) {
+			const randomColor = colors[Math.floor(Math.random() * colors.length)]
+			$star.style.backgroundColor = randomColor
+		}
+		$template.content.appendChild($star)
+	}
+	$main.appendChild($template.content)
+}
 
-	let planetZindex = planets.length
+function createPlanets() {
+	let $template = d.createElement('template'),
+		planetOutlineSize = 140,
+		MAX_PLANETS = planets.length,
+		planetZindex = MAX_PLANETS
+
+	const orbitIncrease = {
+		['saturn']: 30,
+		['uranus']: 30,
+		['neptune']: 15,
+	}
+
+	$outlineClone.appendChild($planetClone)
 	planets.forEach((planet, index) => {
-		if (window.innerWidth <= 530) MAX_PLANETS = 4
+		if (w.innerWidth <= 530) MAX_PLANETS = MAX_PLANETS_MOBILE
 		if (index >= MAX_PLANETS) return
-		let $clone = $outline.cloneNode(true)
+		let $clone = $outlineClone.cloneNode(true),
+			$img = $clone.querySelector('div')
 
-		$clone.classList.add('planet-wrapper', `${planet.name}-outline`)
-
-		if (planet.name === 'saturn' || planet.name === 'uranus') {
-			planetOutlineSize += 30
-		}
-		if (planet.name === 'neptune') {
-			planetOutlineSize += 15
-		}
+		planetOutlineSize += orbitIncrease[planet.name] ?? 0
 		$clone.style.width = `${planetOutlineSize}px`
 		$clone.style.height = `${planetOutlineSize - 40}px`
-		planetOutlineSize += 60
-
 		$clone.style.zIndex = planetZindex
+		planetOutlineSize += 60
 		planetZindex -= 1
 
-		let $img = $clone.querySelector('div')
 		$img.style.backgroundImage = `url(assets/${planet.name}.png)`
-
 		$img.style.animation = `${planet.name}-orbit ${planet.orbitTime}s linear infinite`
-
 		$img.style.width = `${planet.size}px`
 		$img.style.height = `${planet.size}px`
-		$img.setAttribute('data-name-es', planet['name-es'])
 
+		$img.setAttribute('data-name-es', planet['name-es'])
 		$img.setAttribute('data-number-es', planet['number-es'])
 		$img.setAttribute('data-orbit', planet.orbitTime)
 		$img.setAttribute('data-rotation', planet.rotationTime)
 		$img.classList.add('planet-img')
+		$clone.classList.add('planet-wrapper', `${planet.name}-outline`)
 
 		$template.content.appendChild($clone)
 	})
 	$wrapper.appendChild($template.content)
+
+	$earth = d.querySelector('.earth-outline .planet-img')
+	$listPlanets = d.querySelectorAll('*[class$=outline]')
+	$listPlanets = Array.from($listPlanets)
+
+	$template = null
 	isPlanetsLoaded = true
 }
 
@@ -184,9 +195,103 @@ function createMoon() {
 
 	$outline.appendChild($image)
 	$earth.appendChild($outline)
+	$moon = $image
+}
+function restartEarthAnim() {
+	$earth.classList.add('earth-solar-eclipse')
+	$earth.style.animation = 'none'
+	$moon.style.opacity = 0
+	$moon.style.animation = 'none'
+
+	setTimeout(() => {
+		$earth.style.animation = `earth-orbit ${$earth.dataset.orbit}s linear infinite`
+		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
+		$moon.style.opacity = 1
+	}, 500)
+}
+
+function changeDialogPosition({ left = false }) {
+	if (!left) {
+		$dialog.style.top = 'initial'
+		$dialog.style.left = 'initial'
+		$dialog.style.bottom = '4vh'
+		$dialog.style.right = '4vh'
+	} else {
+		$dialog.style.top = '4vh'
+		$dialog.style.left = '4vh'
+		$dialog.style.bottom = 'initial'
+		$dialog.style.right = 'initial'
+	}
+}
+function toggleAllButtons({ hidde = false }) {
+	if (!hidde) {
+		$dialogButton.classList.remove('hidden')
+		$eventsButton.classList.remove('hidden')
+	} else {
+		$dialogButton.classList.add('hidden')
+		$eventsButton.classList.add('hidden')
+	}
 }
 
 function startSolarEclipse() {
+	const { title, description } = listEvents.find((event) => {
+		return event.title === 'Eclipse Solar'
+	})
+
+	const $planetsHidden = $listPlanets.filter((planet) => {
+		let isEarth = planet.classList.contains('earth-outline'),
+			isMoon = planet.classList.contains('moon-outline')
+		return !isEarth && !isMoon
+	})
+
+	const TIME_ECLIPSE_START = 11700,
+		TIME_ECLIPSE_END = 17500
+
+	$planetsHidden.forEach((planet) => {
+		planet.style.opacity = 0
+		planet.classList.add('hidden')
+	})
+
+	restartEarthAnim()
+	scaleEarth()
+	changeDialogPosition({ left: true })
+	toggleAllButtons({ hidde: true })
+	$dialogTitle.textContent = title
+	$dialogText.textContent = description
+	$dialog.classList.remove('hidden')
+
+	setTimeout(() => $moon.classList.add('moon-eclipse-solar'), TIME_ECLIPSE_START)
+
+	setTimeout(() => {
+		$moon.classList.remove('moon-eclipse-solar')
+		$dialog.classList.add('hidden')
+		$dialogTitle.textContent = ''
+		$dialogText.textContent = ''
+		changeDialogPosition({ left: false })
+
+		$sun.style.transform = 'translate(-50%,-50%)'
+		$earth.parentElement.style.transform = 'translate(-50%,-50%)'
+
+		$planetsHidden.forEach((planet) => {
+			planet.style.opacity = 1
+			planet.classList.remove('hidden')
+		})
+		toggleAllButtons({ hidde: false })
+		isEclipseRunning = false
+	}, TIME_ECLIPSE_END)
+}
+
+function scaleEarth() {
+	if (w.innerWidth >= MOBILE_SIZE) {
+		$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
+		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
+	} else {
+		$sun.style.transform = 'translate(-50%,-50%) scale(1.5)'
+		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(1.1)'
+	}
+}
+
+function startLunarEclipse() {
 	const $earth = d.querySelector('.earth-outline .planet-img'),
 		$moon = d.querySelector('.moon-outline div'),
 		$dialogButton = $dialog.querySelector('button')
@@ -205,7 +310,7 @@ function startSolarEclipse() {
 	})
 
 	$eventsButton.classList.add('hidden')
-	if (window.innerWidth >= 400) {
+	if (w.innerWidth >= 400) {
 		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
 	} else {
 		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(1.1)'
@@ -219,28 +324,35 @@ function startSolarEclipse() {
 		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
 		$moon.style.opacity = 1
 	}, 500)
-	if (window.innerWidth >= 400) {
+
+	if (w.innerWidth >= 400) {
 		$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
 	} else {
 		$sun.style.transform = 'translate(-50%,-50%) scale(1.5)'
 	}
 
-	$dialogTitle.textContent = 'Eclipse Solar'
+	$dialogTitle.textContent = 'Eclipse Lunar'
 	$dialogText.textContent =
-		'Durante un eclipse solar la luna se interpone entre el sol y la tierra creando una gigantesca sombra temporal.'
+		'Durante un eclipse lunar la Tierra se interpone entre el Sol y la Luna, proyectando su sombra sobre la superficie lunar. Esto causa que la Luna se oscurezca momentáneamente y adopte una tonalidad rojiza, conocida como "Luna de sangre"'
 	$dialogButton.classList.add('hidden')
 	$eventsButton.classList.add('hidden')
+	$dialog.style.top = '4vh'
+	$dialog.style.left = '4vh'
+	$dialog.style.bottom = 'initial'
+	$dialog.style.right = 'initial'
 	$dialog.classList.remove('hidden')
-
 	setTimeout(() => {
-		$moon.classList.add('moon-eclipse-solar')
-	}, 11700)
-
+		$moon.classList.add('moon-eclipse-lunar')
+	}, 24500)
 	setTimeout(() => {
-		$moon.classList.remove('moon-eclipse-solar')
+		$moon.classList.remove('moon-eclipse-lunar')
 		$dialogTitle.textContent = ''
 		$dialogText.textContent = ''
 		$dialog.classList.add('hidden')
+		$dialog.style.top = 'initial'
+		$dialog.style.left = 'initial'
+		$dialog.style.bottom = '4vh'
+		$dialog.style.right = '4vh'
 
 		$sun.style.transform = 'translate(-50%,-50%)'
 		$earth.parentElement.style.transform = 'translate(-50%,-50%)'
@@ -257,12 +369,12 @@ function startSolarEclipse() {
 		$dialogButton.classList.remove('hidden')
 		$eventsButton.classList.remove('hidden')
 		isEclipseRunning = false
-	}, 17500)
+	}, 27000)
 }
 
 d.addEventListener('DOMContentLoaded', (e) => {
 	setTimeout(() => createSun(), 1000)
-	setTimeout(() => createStars(NUM_STARS), 4000)
+	setTimeout(() => createStars(MAX_NUM_STARS), 4000)
 	setTimeout(() => createPlanets(), 8000)
 	setTimeout(() => createMoon(), 10000)
 	setTimeout(() => $eventsButton.classList.remove('hidden'), 12000)
@@ -306,7 +418,7 @@ d.addEventListener('click', (e) => {
 		if ($eventList.classList.contains('hidden')) {
 			e.target.textContent = 'Cerrar'
 			$eventList.classList.remove('hidden')
-			if (window.innerWidth >= 900) {
+			if (w.innerWidth >= 900) {
 				e.target.classList.add('hidden')
 			}
 		} else {
@@ -327,18 +439,8 @@ d.addEventListener('click', (e) => {
 	}
 	if (e.target.matches('#lunar-eclipse-button')) {
 		isEclipseRunning = true
-		$dialogTitle.textContent = 'Eclipse lunar'
-		$dialogText.textContent = 'Disponible proximamante...'
 		$eventList.classList.add('hidden')
-		$eventsButton.classList.add('hidden')
-		$dialog.querySelector('button').classList.add('hidden')
-		$dialog.classList.remove('hidden')
-		setTimeout(() => {
-			$eventsButton.classList.remove('hidden')
-			$eventsButton.textContent = 'Simular eventos 🕹️'
-			$dialog.querySelector('button').classList.remove('hidden')
-			$dialog.classList.add('hidden')
-			isEclipseRunning = false
-		}, 3000)
+		$eventsButton.textContent = 'Simular eventos 🕹️'
+		startLunarEclipse()
 	}
 })
