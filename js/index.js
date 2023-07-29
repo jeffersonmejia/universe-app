@@ -205,7 +205,11 @@ function startSolarEclipse() {
 	})
 
 	$eventsButton.classList.add('hidden')
-	$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
+	if (window.innerWidth >= 400) {
+		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
+	} else {
+		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(1.1)'
+	}
 	$earth.classList.add('earth-solar-eclipse')
 	$earth.style.animation = 'none'
 	$moon.style.opacity = 0
@@ -215,7 +219,11 @@ function startSolarEclipse() {
 		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
 		$moon.style.opacity = 1
 	}, 500)
-	$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
+	if (window.innerWidth >= 400) {
+		$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
+	} else {
+		$sun.style.transform = 'translate(-50%,-50%) scale(1.5)'
+	}
 
 	$dialogTitle.textContent = 'Eclipse Solar'
 	$dialogText.textContent =
