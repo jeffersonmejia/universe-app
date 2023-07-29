@@ -44,6 +44,7 @@ main {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	filter: grayscale(40%);
 	box-shadow: inset 0px 0px 60px 8rem rgba(255, 102, 0, 0.1),
 		0px 0px 60px 14rem rgba(255, 102, 0, 0.1);
 	animation: opacity 0.3s ease-in-out;
@@ -210,7 +211,7 @@ div.neptune-outline > div {
 		0px 0px 20px 15px rgba(0, 174, 255, 0.2);
 }
 .earth-outline > .planet-img {
-	z-index: 999;
+	transition: opacity 0.3s ease-in;
 }
 @keyframes moon-orbit {
 	from {
@@ -229,6 +230,7 @@ div.neptune-outline > div {
 	bottom: 4vh;
 	color: white;
 	background-color: #000;
+
 	border: 1px solid rgb(75, 75, 75);
 	padding: 0.5rem 1rem;
 	padding-bottom: 1rem;
@@ -254,9 +256,77 @@ div.neptune-outline > div {
 	padding: 8px 0;
 	border-radius: 4px;
 	border: none;
-	background-color: white;
-	color: black;
+	background-color: rgb(32, 32, 32);
+
+	color: white;
+
 	cursor: pointer;
+}
+.events-button {
+	position: fixed;
+	right: 4vh;
+	bottom: 4vh;
+	border: none;
+	box-shadow: 0 0 16px black;
+	cursor: pointer;
+	padding: 6px 8px;
+	border-radius: 4px;
+	z-index: 999;
+	min-width: 80px;
+	background-color: rgb(32, 32, 32);
+	color: white;
+}
+.event-list {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 998;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	animation: opacity 0.3s ease-in;
+}
+.event-list li {
+	background-color: black;
+	color: white;
+	padding: 8px 0;
+	cursor: pointer;
+	width: 100%;
+	text-align: center;
+}
+.events-button-list {
+	display: none;
+}
+.event-list li:first-child {
+	border-bottom: 1px solid rgb(134, 134, 134);
+}
+.earth-solar-eclipse {
+	transform: translateX(130px);
+}
+/* @keyframes earth-eclipse-rotation {
+	from {
+		transform: translateZ(0);
+	}
+	to {
+		transform: translateZ(360);
+	}
+} */
+.moon-outline .moon-eclipse-solar {
+	transition: box-shadow 0.3s ease-in-out;
+	box-shadow: 2px 0 12px 12px black;
+}
+@keyframes solar-eclipse {
+	from {
+		transform: rotate(0deg) translateX(28px) rotate(0deg) rotateZ(0deg);
+	}
+	to {
+		transform: rotate(-180deg) translateX(28px) rotate(180deg) rotateZ(360deg);
+	}
 }
 .hidden {
 	display: none;
@@ -266,5 +336,18 @@ div.neptune-outline > div {
 	body,
 	main {
 		overflow: hidden;
+	}
+}
+@media screen and (min-width: 900px) {
+	.event-list {
+		background-color: rgb(0, 0, 0);
+		width: 260px;
+		box-shadow: 0 0 16px rgb(36, 36, 36);
+	}
+	li.events-button-list {
+		background-color: rgb(32, 32, 32);
+	}
+	.events-button-list {
+		display: block;
 	}
 }

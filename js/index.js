@@ -5,10 +5,13 @@ const d = document,
 	$sun = d.querySelector('.sun-hidden'),
 	$dialog = d.querySelector('.dialog-fixed'),
 	$dialogTitle = d.querySelector('.dialog-fixed h3'),
-	$dialogText = d.querySelector('.dialog-fixed p')
+	$dialogText = d.querySelector('.dialog-fixed p'),
+	$eventList = d.querySelector('.event-list'),
+	$eventsButton = d.querySelector('.events-button')
 
 const NUM_STARS = 280
-let isPlanetsLoaded = false
+let isPlanetsLoaded = false,
+	isEclipseRunning = false
 
 function createSun() {
 	$sun.classList.remove('sun-hidden')
@@ -183,14 +186,55 @@ function createMoon() {
 	$earth.appendChild($outline)
 }
 
+function startSolarEclipse() {
+	const $earth = d.querySelector('.earth-outline .planet-img'),
+		$moon = d.querySelector('.moon-outline div'),
+		$dialogButton = $dialog.querySelector('button')
+
+	$eventsButton.classList.add('hidden')
+	$earth.classList.add('earth-solar-eclipse')
+	$earth.style.opacity = 0
+	$earth.style.animation = 'none'
+	$moon.style.opacity = 0
+	$moon.style.animation = 'none'
+	setTimeout(() => {
+		$earth.style.animation = `earth-orbit ${$earth.dataset.orbit}s linear infinite`
+		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
+		$moon.style.opacity = 1
+		$earth.style.opacity = 1
+	}, 500)
+
+	$dialogTitle.textContent = 'Eclipse Solar'
+	$dialogText.textContent =
+		'Durante un eclipse solar la luna se interpone entre el sol y la tierra creando una gigantesca sombra temporal.'
+	$dialogButton.classList.add('hidden')
+	$eventsButton.classList.add('hidden')
+	$dialog.classList.remove('hidden')
+
+	setTimeout(() => {
+		$moon.classList.add('moon-eclipse-solar')
+	}, 12000)
+
+	setTimeout(() => {
+		$moon.classList.remove('moon-eclipse-solar')
+		$dialogTitle.textContent = ''
+		$dialogText.textContent = ''
+		$dialog.classList.add('hidden')
+		$dialogButton.classList.remove('hidden')
+		$eventsButton.classList.remove('hidden')
+		isEclipseRunning = false
+	}, 17000)
+}
+
 d.addEventListener('DOMContentLoaded', (e) => {
 	setTimeout(() => createSun(), 1000)
 	setTimeout(() => createStars(NUM_STARS), 4000)
 	setTimeout(() => createPlanets(), 8000)
 	setTimeout(() => createMoon(), 10000)
+	setTimeout(() => $eventsButton.classList.remove('hidden'), 12000)
 })
 d.addEventListener('click', (e) => {
-	if (!isPlanetsLoaded) return
+	if (!isPlanetsLoaded || isEclipseRunning) return
 	if (e.target.matches('.planet-img') || e.target.matches('.moon-outline')) {
 		const planet = e.target.matches('.moon-outline')
 			? e.target.parentElement.dataset
@@ -203,21 +247,64 @@ d.addEventListener('click', (e) => {
 
 		$dialogTitle.textContent = name
 		$dialogText.textContent = `Es el ${number} planeta del sistema solar, tarda ${orbitTime} días en orbitar el sol y ${rotationTime} ${day} en rotar sobre su propio eje.`
+		$eventsButton.classList.add('hidden')
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.closest('.sun')) {
 		const sun = e.target.dataset
 		$dialogTitle.textContent = 'El sol'
 		$dialogText.textContent = `Es la estrella más grande de nuestro sistema solar, compuesta principalmente de hidrogeno y helio. Tarda aproximadamente ${sun.rotation} días en rotar sobre su propio eje.`
+		$eventsButton.classList.add('hidden')
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.moon-outline div')) {
 		const moon = e.target.dataset
 		$dialogTitle.textContent = 'La Luna'
 		$dialogText.textContent = `Es el único satélite natural de la Tierra y es uno de los objetos más familiares en el cielo nocturno. Tarda aproximadamente ${moon.orbit} días en orbitar la tierra y ${moon.rotation} días en rotar sobre su propio eje.`
+		$eventsButton.classList.add('hidden')
 		$dialog.classList.remove('hidden')
 	}
 	if (e.target.matches('.dialog-fixed button')) {
 		$dialog.classList.add('hidden')
+		$eventsButton.classList.remove('hidden')
+	}
+	if (e.target.matches('.events-button')) {
+		if ($eventList.classList.contains('hidden')) {
+			e.target.textContent = 'Cerrar'
+			$eventList.classList.remove('hidden')
+			if (window.innerWidth >= 900) {
+				e.target.classList.add('hidden')
+			}
+		} else {
+			e.target.textContent = 'Simular eventos 🕹️'
+			$eventList.classList.add('hidden')
+		}
+	}
+	if (e.target.matches('.events-button-list')) {
+		$eventsButton.textContent = 'Simular eventos 🕹️'
+		$eventList.classList.add('hidden')
+		$eventsButton.classList.remove('hidden')
+	}
+	if (e.target.matches('#solar-eclipse-button')) {
+		isEclipseRunning = true
+		$eventList.classList.add('hidden')
+		$eventsButton.textContent = 'Simular eventos 🕹️'
+		startSolarEclipse()
+	}
+	if (e.target.matches('#lunar-eclipse-button')) {
+		isEclipseRunning = true
+		$dialogTitle.textContent = 'Eclipse lunar'
+		$dialogText.textContent = 'Disponible proximamante...'
+		$eventList.classList.add('hidden')
+		$eventsButton.classList.add('hidden')
+		$dialog.querySelector('button').classList.add('hidden')
+		$dialog.classList.remove('hidden')
+		setTimeout(() => {
+			$eventsButton.classList.remove('hidden')
+			$eventsButton.textContent = 'Simular eventos 🕹️'
+			$dialog.querySelector('button').classList.remove('hidden')
+			$dialog.classList.add('hidden')
+			isEclipseRunning = false
+		}, 3000)
 	}
 })
