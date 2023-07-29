@@ -1,6 +1,7 @@
 const d = document,
 	w = window,
 	$main = d.querySelector('main'),
+	$footer = d.querySelector('footer'),
 	$wrapper = d.querySelector('.wrapper'),
 	$sun = d.querySelector('.sun-hidden'),
 	$dialog = d.querySelector('.dialog-fixed'),
@@ -86,13 +87,20 @@ const d = document,
 			description:
 				'Durante un eclipse solar la luna se interpone entre el sol y la tierra creando una gigantesca sombra temporal.',
 		},
+		{
+			title: 'Eclipse Lunar',
+			description:
+				'Durante un eclipse lunar la Tierra se interpone entre el Sol y la Luna, proyectando su sombra sobre la superficie lunar. Esto causa que la Luna se oscurezca momentáneamente y adopte una tonalidad rojiza, conocida como "Luna de sangre"',
+		},
 	]
 
 let isPlanetsLoaded = false,
 	isEclipseRunning = false,
+	isFooterShowing = true,
 	$earth = null,
 	$moon = null,
-	$listPlanets = null
+	$listPlanets = null,
+	footerInterval = null
 
 function createSun() {
 	$sun.classList.remove('sun-hidden')
@@ -232,7 +240,35 @@ function toggleAllButtons({ hidde = false }) {
 		$eventsButton.classList.add('hidden')
 	}
 }
-
+function scaleEarth() {
+	if (w.innerWidth >= MOBILE_SIZE) {
+		$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
+		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
+	} else {
+		$sun.style.transform = 'translate(-50%,-50%) scale(1.5)'
+		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(1.1)'
+	}
+}
+function startDialogEvent(title, description) {
+	restartEarthAnim()
+	scaleEarth()
+	changeDialogPosition({ left: true })
+	toggleAllButtons({ hidde: true })
+	$dialogTitle.textContent = title
+	$dialogText.textContent = description
+	$dialog.classList.remove('hidden')
+}
+function dissapearWithOpacity({ listOfEl = null, hidde = true }) {
+	listOfEl.forEach((el) => {
+		if (hidde) {
+			el.style.opacity = 0
+			el.classList.add('hidden')
+		} else {
+			el.style.opacity = 1
+			el.classList.remove('hidden')
+		}
+	})
+}
 function startSolarEclipse() {
 	const { title, description } = listEvents.find((event) => {
 		return event.title === 'Eclipse Solar'
@@ -247,23 +283,13 @@ function startSolarEclipse() {
 	const TIME_ECLIPSE_START = 11700,
 		TIME_ECLIPSE_END = 17500
 
-	$planetsHidden.forEach((planet) => {
-		planet.style.opacity = 0
-		planet.classList.add('hidden')
-	})
-
-	restartEarthAnim()
-	scaleEarth()
-	changeDialogPosition({ left: true })
-	toggleAllButtons({ hidde: true })
-	$dialogTitle.textContent = title
-	$dialogText.textContent = description
-	$dialog.classList.remove('hidden')
-
+	dissapearWithOpacity({ listOfEl: $planetsHidden })
+	startDialogEvent(title, description)
 	setTimeout(() => $moon.classList.add('moon-eclipse-solar'), TIME_ECLIPSE_START)
 
 	setTimeout(() => {
 		$moon.classList.remove('moon-eclipse-solar')
+
 		$dialog.classList.add('hidden')
 		$dialogTitle.textContent = ''
 		$dialogText.textContent = ''
@@ -272,112 +298,68 @@ function startSolarEclipse() {
 		$sun.style.transform = 'translate(-50%,-50%)'
 		$earth.parentElement.style.transform = 'translate(-50%,-50%)'
 
-		$planetsHidden.forEach((planet) => {
-			planet.style.opacity = 1
-			planet.classList.remove('hidden')
-		})
+		dissapearWithOpacity({ listOfEl: $planetsHidden, hidde: false })
 		toggleAllButtons({ hidde: false })
 		isEclipseRunning = false
 	}, TIME_ECLIPSE_END)
 }
 
-function scaleEarth() {
-	if (w.innerWidth >= MOBILE_SIZE) {
-		$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
-		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
-	} else {
-		$sun.style.transform = 'translate(-50%,-50%) scale(1.5)'
-		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(1.1)'
-	}
-}
-
 function startLunarEclipse() {
-	const $earth = d.querySelector('.earth-outline .planet-img'),
-		$moon = d.querySelector('.moon-outline div'),
-		$dialogButton = $dialog.querySelector('button')
-
-	let = $planetsHidden = d.querySelectorAll('*[class$=outline]')
-
-	$planetsHidden = Array.from($planetsHidden)
-	$planetsHidden.forEach((planet) => {
-		if (
-			!planet.classList.contains('earth-outline') &&
-			!planet.classList.contains('moon-outline')
-		) {
-			planet.style.opacity = 0
-			planet.classList.add('hidden')
-		}
+	const { title, description } = listEvents.find((event) => {
+		return event.title === 'Eclipse Lunar'
+	})
+	const $planetsHidden = $listPlanets.filter((planet) => {
+		let isEarth = planet.classList.contains('earth-outline'),
+			isMoon = planet.classList.contains('moon-outline')
+		return !isEarth && !isMoon
 	})
 
-	$eventsButton.classList.add('hidden')
-	if (w.innerWidth >= 400) {
-		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
-	} else {
-		$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(1.1)'
-	}
-	$earth.classList.add('earth-solar-eclipse')
-	$earth.style.animation = 'none'
-	$moon.style.opacity = 0
-	$moon.style.animation = 'none'
-	setTimeout(() => {
-		$earth.style.animation = `earth-orbit ${$earth.dataset.orbit}s linear infinite`
-		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
-		$moon.style.opacity = 1
-	}, 500)
+	const TIME_ECLIPSE_START = 24500,
+		TIME_ECLIPSE_END = 27000
 
-	if (w.innerWidth >= 400) {
-		$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
-	} else {
-		$sun.style.transform = 'translate(-50%,-50%) scale(1.5)'
-	}
-
-	$dialogTitle.textContent = 'Eclipse Lunar'
-	$dialogText.textContent =
-		'Durante un eclipse lunar la Tierra se interpone entre el Sol y la Luna, proyectando su sombra sobre la superficie lunar. Esto causa que la Luna se oscurezca momentáneamente y adopte una tonalidad rojiza, conocida como "Luna de sangre"'
-	$dialogButton.classList.add('hidden')
-	$eventsButton.classList.add('hidden')
-	$dialog.style.top = '4vh'
-	$dialog.style.left = '4vh'
-	$dialog.style.bottom = 'initial'
-	$dialog.style.right = 'initial'
-	$dialog.classList.remove('hidden')
-	setTimeout(() => {
-		$moon.classList.add('moon-eclipse-lunar')
-	}, 24500)
+	dissapearWithOpacity({ listOfEl: $planetsHidden })
+	startDialogEvent(title, description)
+	setTimeout(() => $moon.classList.add('moon-eclipse-lunar'), TIME_ECLIPSE_START)
 	setTimeout(() => {
 		$moon.classList.remove('moon-eclipse-lunar')
+
+		$dialog.classList.add('hidden')
 		$dialogTitle.textContent = ''
 		$dialogText.textContent = ''
-		$dialog.classList.add('hidden')
-		$dialog.style.top = 'initial'
-		$dialog.style.left = 'initial'
-		$dialog.style.bottom = '4vh'
-		$dialog.style.right = '4vh'
+		changeDialogPosition({ left: false })
 
 		$sun.style.transform = 'translate(-50%,-50%)'
 		$earth.parentElement.style.transform = 'translate(-50%,-50%)'
-		$planetsHidden.forEach((planet) => {
-			if (
-				!planet.classList.contains('earth-outline') &&
-				!planet.classList.contains('moon-outline')
-			) {
-				planet.style.opacity = 1
-				planet.classList.remove('hidden')
-			}
-		})
 
-		$dialogButton.classList.remove('hidden')
-		$eventsButton.classList.remove('hidden')
+		dissapearWithOpacity({ listOfEl: $planetsHidden, hidde: false })
+		toggleAllButtons({ hidde: false })
 		isEclipseRunning = false
-	}, 27000)
+	}, TIME_ECLIPSE_END)
 }
+function showUpFooter(time) {
+	const $projectList = $footer.querySelector('a')
+	let footerCounter = time / 1000
 
+	footerInterval = setInterval(() => {
+		$projectList.textContent = `Conoce más proyectos(${footerCounter}s)`
+		footerCounter -= 1
+	}, 1000)
+
+	setTimeout(() => ($footer.style.opacity = 0), time)
+	setTimeout(() => {
+		$footer.classList.add('hidden')
+		clearInterval(footerInterval)
+		isFooterShowing = false
+	}, time + 1000)
+}
 d.addEventListener('DOMContentLoaded', (e) => {
+	const TIME_FOOTER_HIDDEN = 15000
 	setTimeout(() => createSun(), 1000)
 	setTimeout(() => createStars(MAX_NUM_STARS), 4000)
 	setTimeout(() => createPlanets(), 8000)
 	setTimeout(() => createMoon(), 10000)
-	setTimeout(() => $eventsButton.classList.remove('hidden'), 12000)
+	showUpFooter(TIME_FOOTER_HIDDEN)
+	setTimeout(() => $eventsButton.classList.remove('hidden'), TIME_FOOTER_HIDDEN + 2000)
 })
 d.addEventListener('click', (e) => {
 	if (!isPlanetsLoaded || isEclipseRunning) return
