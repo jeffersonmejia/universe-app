@@ -193,7 +193,6 @@ function startSolarEclipse() {
 
 	$eventsButton.classList.add('hidden')
 	$earth.classList.add('earth-solar-eclipse')
-	$earth.style.opacity = 0
 	$earth.style.animation = 'none'
 	$moon.style.opacity = 0
 	$moon.style.animation = 'none'
@@ -201,7 +200,6 @@ function startSolarEclipse() {
 		$earth.style.animation = `earth-orbit ${$earth.dataset.orbit}s linear infinite`
 		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
 		$moon.style.opacity = 1
-		$earth.style.opacity = 1
 	}, 500)
 
 	$dialogTitle.textContent = 'Eclipse Solar'
@@ -213,7 +211,7 @@ function startSolarEclipse() {
 
 	setTimeout(() => {
 		$moon.classList.add('moon-eclipse-solar')
-	}, 12000)
+	}, 11700)
 
 	setTimeout(() => {
 		$moon.classList.remove('moon-eclipse-solar')
@@ -223,7 +221,7 @@ function startSolarEclipse() {
 		$dialogButton.classList.remove('hidden')
 		$eventsButton.classList.remove('hidden')
 		isEclipseRunning = false
-	}, 17000)
+	}, 17500)
 }
 
 d.addEventListener('DOMContentLoaded', (e) => {
