@@ -191,7 +191,21 @@ function startSolarEclipse() {
 		$moon = d.querySelector('.moon-outline div'),
 		$dialogButton = $dialog.querySelector('button')
 
+	let = $planetsHidden = d.querySelectorAll('*[class$=outline]')
+
+	$planetsHidden = Array.from($planetsHidden)
+	$planetsHidden.forEach((planet) => {
+		if (
+			!planet.classList.contains('earth-outline') &&
+			!planet.classList.contains('moon-outline')
+		) {
+			planet.style.opacity = 0
+			planet.classList.add('hidden')
+		}
+	})
+
 	$eventsButton.classList.add('hidden')
+	$earth.parentElement.style.transform = 'translate(-50%,-50%) scale(2)'
 	$earth.classList.add('earth-solar-eclipse')
 	$earth.style.animation = 'none'
 	$moon.style.opacity = 0
@@ -201,6 +215,7 @@ function startSolarEclipse() {
 		$moon.style.animation = `moon-orbit ${$moon.dataset.orbit}s linear infinite`
 		$moon.style.opacity = 1
 	}, 500)
+	$sun.style.transform = 'translate(-50%,-50%) scale(2.5)'
 
 	$dialogTitle.textContent = 'Eclipse Solar'
 	$dialogText.textContent =
@@ -218,6 +233,19 @@ function startSolarEclipse() {
 		$dialogTitle.textContent = ''
 		$dialogText.textContent = ''
 		$dialog.classList.add('hidden')
+
+		$sun.style.transform = 'translate(-50%,-50%)'
+		$earth.parentElement.style.transform = 'translate(-50%,-50%)'
+		$planetsHidden.forEach((planet) => {
+			if (
+				!planet.classList.contains('earth-outline') &&
+				!planet.classList.contains('moon-outline')
+			) {
+				planet.style.opacity = 1
+				planet.classList.remove('hidden')
+			}
+		})
+
 		$dialogButton.classList.remove('hidden')
 		$eventsButton.classList.remove('hidden')
 		isEclipseRunning = false
