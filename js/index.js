@@ -96,7 +96,7 @@ const d = document,
 
 let isPlanetsLoaded = false,
 	isEclipseRunning = false,
-	isFooterShowing = true,
+	isAllContentLoaded = false,
 	$earth = null,
 	$moon = null,
 	$listPlanets = null,
@@ -349,7 +349,6 @@ function showUpFooter(time) {
 	setTimeout(() => {
 		$footer.classList.add('hidden')
 		clearInterval(footerInterval)
-		isFooterShowing = false
 	}, time + 1000)
 }
 d.addEventListener('DOMContentLoaded', (e) => {
@@ -359,10 +358,13 @@ d.addEventListener('DOMContentLoaded', (e) => {
 	setTimeout(() => createPlanets(), 8000)
 	setTimeout(() => createMoon(), 10000)
 	showUpFooter(TIME_FOOTER_HIDDEN)
-	setTimeout(() => $eventsButton.classList.remove('hidden'), TIME_FOOTER_HIDDEN + 2000)
+	setTimeout(() => {
+		$eventsButton.classList.remove('hidden')
+		isAllContentLoaded = true
+	}, TIME_FOOTER_HIDDEN + 2000)
 })
 d.addEventListener('click', (e) => {
-	if (!isPlanetsLoaded || isEclipseRunning) return
+	if (!isPlanetsLoaded || isEclipseRunning || !isAllContentLoaded) return
 	if (e.target.matches('.planet-img') || e.target.matches('.moon-outline')) {
 		const planet = e.target.matches('.moon-outline')
 			? e.target.parentElement.dataset
