@@ -30,6 +30,8 @@ See our universe as you've never done before, simulate astronomical events like 
 
 5. You are ready! Go to https://localhost:5500 <img src='https://i.postimg.cc/76PGf6WB/google-chrome-logo-png-0.png' width="12"/>
 
+6. If you'd prefer access with no installation, get in [here](https://jeffersonmejia.github.io/universe-app) 💡
+
 ## 3. Preview
 
 <img src="https://i.postimg.cc/mkxVFJ0p/Frame-1.png" width="450"/>
