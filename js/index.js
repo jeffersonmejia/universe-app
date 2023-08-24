@@ -12,6 +12,7 @@ const d = document,
 	$eventsButton = d.querySelector('.events-button'),
 	$planetClone = d.createElement('div'),
 	$outlineClone = d.createElement('div'),
+	$aboutFooter = d.querySelector('.about-counter'),
 	MAX_NUM_STARS = 280,
 	MAX_PLANETS_MOBILE = 4,
 	MOBILE_SIZE = 400,
@@ -337,11 +338,10 @@ function startLunarEclipse() {
 	}, TIME_ECLIPSE_END)
 }
 function showUpFooter(time) {
-	const $projectList = $footer.querySelector('a')
 	let footerCounter = time / 1000
 
 	footerInterval = setInterval(() => {
-		$projectList.textContent = `Conoce más proyectos(${footerCounter}s)`
+		$aboutFooter.textContent = ` (${footerCounter}s)`
 		footerCounter -= 1
 	}, 1000)
 
