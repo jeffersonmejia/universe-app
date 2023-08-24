@@ -4,7 +4,7 @@ Made with love from <img src='https://i.postimg.cc/Mc25FLHJ/Flag-of-Ecuador.png'
 
 # **Universe App**
 
-Sight, read about planets and simulate events 📅
+See, learn, and simulate astronomical events 📅
 
 ## Content table
 
@@ -15,7 +15,7 @@ Sight, read about planets and simulate events 📅
 
 ## 1. Introduction
 
-Sight our universe as never you have done, simulate astronomical events like eclipses and read planet characteristics 🪐
+See our universe as you've never done before, simulate astronomical events like eclipses and learn about planet characteristics 🪐
 
 ## 2. Installation
 
