@@ -32,7 +32,7 @@ See our universe as you've never done before, simulate astronomical events like 
 
 ## 3. Preview
 
-<img src="https://i.postimg.cc/XvTFzcdB/Captura-de-pantalla-2023-07-29-204723.png" width="350"/>
+<img src="https://i.postimg.cc/XvTFzcdB/Captura-de-pantalla-2023-07-29-204723.png" width="450"/>
 
 ## 4. Author
 
