@@ -22,7 +22,9 @@ See our universe as you've never done before, simulate astronomical events like 
 1. Download [git](https://git-scm.com/downloads) <img src='https://i.postimg.cc/4nGTxK8y/Git-Icon-1788-C.png' width="10"/> if you don't have it
 2. Secondly, in your prefered console <img src='https://i.postimg.cc/GmBZnx3K/7560719.png' width="12" alt="Terminal freepik by Royyan Wijaya"/> execute:
 
-   `git clone https://github.com/jeffersonmejia/universe-app.git`
+   ```
+   git clone https://github.com/jeffersonmejia/universe-app.git
+   ```
    
 4. Turn VS code <img src='https://code.visualstudio.com/favicon.ico' width="10"/> live server on
 
