@@ -26,7 +26,7 @@ See our universe as you've never done before, simulate astronomical events like 
    git clone https://github.com/jeffersonmejia/universe-app.git
    ```
    
-4. Turn VS code <img src='https://code.visualstudio.com/favicon.ico' width="10"/> live server on
+4. Turn on live server in VS code <img src='https://code.visualstudio.com/favicon.ico' width="10"/>
 
 5. You are ready! Go to https://localhost:5500 <img src='https://i.postimg.cc/76PGf6WB/google-chrome-logo-png-0.png' width="12"/>
 
