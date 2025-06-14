@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Universe App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./assets/icon.png" type="image/x-icon" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/index.css" />
+  </head>
+  <body>
+    <main id="main">
+      <div class="wrapper">
+        <div class="sun-hidden" data-star="sun" disabled></div>
+      </div>
+      <div class="dialog-fixed hidden">
+        <h3>...</h3>
+        <p>...</p>
+        <button class="primary-button">Cerrar</button>
+      </div>
+      <button class="events-button hidden">Simular eventos 🕹️</button>
+      <ul class="event-list hidden">
+        <li id="solar-eclipse-button">Eclipse solar ☀️</li>
+        <li id="lunar-eclipse-button">Eclipse lunar 🌕</li>
+        <li id="signup-button">Suscribirse 🔔</li>
+        <li class="events-button-list">Cerrar</li>
+      </ul>
+    </main>
+    <footer>
+      <small>Jefferson Mejía @jeffersonmejiach</small>
+      <small class="about">
+        Conoce más
+        <a
+          href="https://jeffersonmejia.github.io/portfolio-app"
+          target="_blank"
+          id="projects-ancle"
+          >proyectos</a
+        ><span class="about-counter"></span>
+      </small>
+    </footer>
+    <dialog id="dialog-signup" class="hidden">
+      <form action="" method="dialog">
+        <legend>
+          <h2>Registro</h2>
+        </legend>
+        <input type="email" name="email" placeholder="Correo electrónico" />
+        <fieldset>
+          <input type="checkbox" name="notifications" />
+          <label for="">Recibir notificaciones sobre actualizaciones</label>
+        </fieldset>
+        <input type="submit" value="Suscribirse" />
+      </form>
+    </dialog>
+    <script src="./js/index.js"></script>
+  </body>
+</html>

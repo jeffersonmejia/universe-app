@@ -1,0 +1,632 @@
+/* VARIABLES GENERALES: FONDO, TEXTO Y TAMAÑO POR DEFECTO DE LA IMAGEN DEL SOL */
+:root {
+  --bg-color: #000;
+  --fg-color: #fff;
+  --sun-mobile-size: 150px;
+}
+
+/* SELECTOR SIMPLE #1 - UNIVERSAL
+... ESPECIFICIDAD: 0,0,0 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* SELECTOR SIMPLE #2 - ELEMENTO
+... ESPECIFICIDAD: 0,0,1 */
+body {
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* SELECTOR SIMPLE #3 - ID
+... ESPECIFICIDAD: 0,1,0 */
+#main {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* SELECTOR SIMPLE #4 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: var(--fg-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px 1px white;
+  animation: opacity 0.3s ease-in-out;
+  z-index: 2;
+}
+
+/* SELECTOR SIMPLE #5 - CLASE Y ATRIBUTO
+... ESPECIFICIDAD: 0,2,0 */
+.sun[data-star='sun'] {
+  background-image: url('../assets/sun.png');
+  height: 120px;
+  width: 120px;
+  background-size: cover;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  filter: grayscale(40%);
+  box-shadow: inset 0px 0px 60px 8rem rgba(255, 102, 0, 0.1),
+    0px 0px 60px 14rem rgba(255, 102, 0, 0.1);
+  animation: opacity 0.3s ease-in-out;
+  transition: transform 0.3s ease-in;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* SELECTOR SIMPLE #6 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.planet-wrapper {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgb(36, 36, 36);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: opacity 0.3s ease-in-out;
+}
+
+/* SELECTOR SIMPLE #7 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.planet-img {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border-radius: 50%;
+  position: absolute;
+  top: 43%;
+  left: 42%;
+  cursor: pointer;
+}
+
+/* SELECTOR SIMPLE #8 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.moon-outline {
+  cursor: default;
+  top: 43%;
+  left: 42%;
+  width: 60px;
+  height: 55px;
+  border-radius: 50%;
+  border: 2px solid rgb(100, 100, 100);
+  transform: translate(-50%, -50%);
+  animation: opacity 0.3s ease-in-out;
+  z-index: 1;
+  position: absolute;
+}
+
+/* SELECTOR SIMPLE #9 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.dialog-fixed {
+  width: 100%;
+  min-width: 280px;
+  max-width: 50vw;
+  position: fixed;
+  right: 4vh;
+  bottom: 4vh;
+  color: white;
+  background-color: #000;
+  border: 1px solid rgb(75, 75, 75);
+  padding: 0.5rem 1rem;
+  padding-bottom: 1rem;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 0 16px black;
+}
+
+/* SELECTOR SIMPLE #10 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.primary-button {
+  padding: 8px 0;
+  border-radius: 4px;
+  border: none;
+  background-color: rgb(32, 32, 32);
+  color: white;
+  cursor: pointer;
+}
+
+/* SELECTOR SIMPLE #11 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.events-button {
+  position: fixed;
+  right: 4vh;
+  bottom: 4vh;
+  border: none;
+  box-shadow: 0 0 16px black;
+  cursor: pointer;
+  padding: 15px 0;
+  border-radius: 4px;
+  z-index: 999;
+  min-width: 80px;
+  width: 100%;
+  max-width: 150px;
+  background-color: rgb(32, 32, 32);
+  color: white;
+}
+
+/* SELECTOR SIMPLE #12 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.event-list {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  animation: opacity 0.3s ease-in;
+}
+
+/* SELECTOR SIMPLE #13 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.events-button-list {
+  display: none;
+}
+
+/* SELECTOR SIMPLE #14 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.earth-solar-eclipse {
+  transform: translateX(130px);
+}
+
+/* SELECTOR SIMPLE #15 - CLASE
+... ESPECIFICIDAD: 0,1,0 */
+.hidden {
+  display: none;
+}
+
+/* SELECTOR SIMPLE #16 - ELEMENTO
+... ESPECIFICIDAD: 0,0,1 */
+dialog {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* SELECTOR SIMPLE #17 - ELEMENTO Y ATRIBUTO
+... ESPECIFICIDAD: 0,1,1 */
+dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* SELECTOR COMBINATORIO #1 - DESCENDIENTE CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,1 */
+.planet-wrapper p {
+  color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  position: absolute;
+  font-size: 0.8rem;
+  left: -36px;
+  top: -12px;
+}
+
+/* SELECTOR COMBINATORIO #2 - HIJO DIRECTO CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,2 */
+div.mars-outline > div,
+div.jupiter-outline > div {
+  top: 46%;
+  left: 46%;
+}
+
+/* SELECTOR COMBINATORIO #3 - HIJO DIRECTO CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,2 */
+div.saturn-outline > div {
+  top: 46%;
+  left: 46%;
+}
+
+/* SELECTOR COMBINATORIO #4 - HIJO DIRECTO CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,2 */
+div.uranus-outline > div {
+  top: 42%;
+  left: 56%;
+}
+
+/* SELECTOR COMBINATORIO #5 - HIJO DIRECTO CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,2 */
+div.neptune-outline > div {
+  top: 42%;
+  left: 58%;
+}
+
+/* SELECTOR COMBINATORIO #6 - DESCENDIENTE CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,2 */
+.moon-outline div {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  cursor: pointer;
+  z-index: 12;
+  box-shadow: inset 0px 0px 20px 15px rgba(0, 174, 255, 0.2),
+    0px 0px 20px 15px rgba(0, 174, 255, 0.2);
+}
+
+/* SELECTOR COMBINATORIO #7 - DESCENDIENTE CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,1 */
+.dialog-fixed p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* SELECTOR COMBINATORIO #8 - DESCENDIENTE CLASE A CLASE
+... ESPECIFICIDAD: 0,2,0 */
+.dialog-fixed .primary-button {
+  width: 80px;
+  margin-left: auto;
+  margin-top: 4px;
+}
+
+/* SELECTOR COMBINATORIO #9 - DESCENDIENTE CLASE A ELEMENTO
+... ESPECIFICIDAD: 0,1,1 */
+.event-list li {
+  background-color: black;
+  color: white;
+  padding: 8px 0;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+/* SELECTOR COMBINATORIO #10 - DESCENDIENTE ELEMENTO A ELEMENTO
+... ESPECIFICIDAD: 0,0,2 */
+footer a {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+/* SELECTOR COMBINATORIO #11 - DESCENDIENTE CLASE A CLASE E HIJO DIRECTO
+... ESPECIFICIDAD: 0,2,0 */
+.earth-outline > .planet-img {
+  transition: opacity 0.3s ease-in;
+}
+
+/* SELECTOR COMBINATORIO #12 - DESCENDIENTE CLASE A CLASE
+... ESPECIFICIDAD: 0,2,0 */
+.moon-outline .moon-eclipse-solar {
+  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: -4px 0 12px 12px black;
+}
+
+/* SELECTOR COMBINATORIO #13 - DESCENDIENTE CLASE A CLASE
+... ESPECIFICIDAD: 0,2,0 */
+.moon-outline .moon-eclipse-lunar {
+  box-shadow: -4px 0 50px 10px rgb(255 0 0);
+}
+
+/* SELECTOR COMBINATORIO #14 - ELEMENTO
+... ESPECIFICIDAD: 0,0,2 */
+dialog form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  padding: 2rem;
+  border-radius: 4px;
+  background-color: black;
+  flex-direction: column;
+  color: white;
+  gap: 0.8rem;
+}
+
+/* SELECTOR COMBINATORIO #15 - ELEMENTO
+... ESPECIFICIDAD: 0,0,2 */
+dialog fieldset {
+  border: none;
+}
+
+/* SELECTOR COMBINATORIO #16 - ELEMENTO
+... ESPECIFICIDAD: 0,0,2 */
+dialog label {
+  font-size: 0.8rem;
+}
+
+/* SELECTOR COMBINATORIO #17 - ELEMENTO
+... ESPECIFICIDAD: 0,0,2 */
+dialog input {
+  border-radius: 4px;
+  padding: 1rem;
+  color: rgb(200, 200, 200);
+  border: none;
+  background-color: rgb(32, 32, 32);
+}
+
+/* SELECTOR COMBINATORIO #18 - ELEMENTO A ELEMENTO CON ATRIBUTO
+... ESPECIFICIDAD: 0,1,2 */
+dialog input[type='submit'] {
+  color: white;
+  cursor: pointer;
+}
+
+/* SELECTOR COMBINATORIO #19 - ELEMENTO A ELEMENTO
+... ESPECIFICIDAD: 0,0,1 */
+dialog legend {
+  margin-bottom: 1rem;
+}
+
+/* SELECTOR COMBINATORIO #20 - ELEMENTO A ELEMENTO
+... ESPECIFICIDAD: 0,0,1 */
+dialog fieldset {
+  margin-top: 0.3rem;
+}
+
+/* SELECTOR COMBINATORIO #21 - ELEMENTO A ELEMENTO
+... ESPECIFICIDAD: 0,0,1 */
+dialog h2 {
+  color: rgb(186, 255, 206);
+}
+
+/* SELECTOR COMBINATORIO #22 - PRIMER HERMANO ADYACENTE
+... ESPECIFICIDAD: 0,0,2 */
+main + footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: white;
+  background-color: black;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.9;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* SELECTOR COMBINATORIO #22 -  HERMANO ADYACENTE GENERAL, 
+... TIPO CLASE Y CON PSEUDOCLASE
+... ESPECIFICIDAD: 0,3,0 */
+.wrapper ~ .star:last-child {
+  background-color: transparent;
+  box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.9),
+    0 0 30px 10px rgba(255, 0, 120, 0.6), 0 0 60px 20px rgba(100, 0, 255, 0.4);
+  border-radius: 50%;
+  width: 4px;
+  height: 4px;
+  transform: scale(2) rotate(360deg);
+  animation: spin 6s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+@keyframes spin {
+  from {
+    transform: scale(2) rotate(0deg);
+  }
+  to {
+    transform: scale(2) rotate(360deg);
+  }
+}
+
+/* PSEUDO-CLASE #1
+... ESPECIFICIDAD: 0,2,1 */
+.event-list li:first-child {
+  border-bottom: 1px solid rgb(134, 134, 134);
+}
+
+/* PSEUDO-CLASE #2
+... ESPECIFICIDAD: 0,2,1 */
+.sun:hover {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* PSEUDO-CLASE #3
+... ESPECIFICIDAD: 0,2,1 */
+.sun:active {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+}
+
+/* PSEUDO-CLASE #4
+... ESPECIFICIDAD: 0,2,1 */
+.sun:active {
+  filter: blur(1.1rem);
+}
+
+/* PSEUDO-CLASE #5
+... ESPECIFICIDAD: 0,2,1 */
+#projects-ancle:visited {
+  color: aqua;
+}
+
+/* PSEUDO-CLASE #6
+... ESPECIFICIDAD: 0,2,1 */
+.event-list li:nth-child(2) {
+  border-bottom: 1px solid rgb(134, 134, 134);
+}
+
+/* PSEUDO-ELEMENTO #1
+... ESPECIFICIDAD: 0,0,3 */
+dialog input::placeholder {
+  color: rgb(110, 110, 110);
+}
+
+/* PSEUDO-ELEMENTO #2 
+... ESPECIFICIDAD: 0,0,3 */
+dialog h2::first-letter {
+  color: rgb(118, 255, 159);
+  text-transform: uppercase;
+}
+
+/* PSEUDO-ELEMENTO #3
+... ESPECIFICIDAD: 0,0,3 */
+body::selection {
+  background-color: #b47500;
+  color: white;
+}
+
+/* ANIMACIONES */
+@keyframes rotate-sun {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mercury-orbit {
+  from {
+    transform: rotate(0deg) translateX(70px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(70px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes venus-orbit {
+  from {
+    transform: rotate(0deg) translateX(100px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(100px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes earth-orbit {
+  from {
+    transform: rotate(0deg) translateX(130px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(130px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes mars-orbit {
+  from {
+    transform: rotate(0deg) translateX(160px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(160px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes jupiter-orbit {
+  from {
+    transform: rotate(0deg) translateX(190px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(190px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes saturn-orbit {
+  from {
+    transform: rotate(0deg) translateX(235px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(235px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes uranus-orbit {
+  from {
+    transform: rotate(0deg) translateX(235px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(235px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes neptune-orbit {
+  from {
+    transform: rotate(0deg) translateX(255px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(255px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes moon-orbit {
+  from {
+    transform: rotate(0deg) translateX(28px) rotate(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(28px) rotate(-360deg) rotateZ(360deg);
+  }
+}
+
+/* VERSION TABLET */
+@media screen and (min-width: 600px) {
+  /* SELECTOR SIMPLE #1 - ELEMENTO
+  ... ESPECIFICIDAD: 0,0,1 */
+  body,
+  main {
+    overflow: hidden;
+  }
+
+  /* SELECTOR SIMPLE #2 - CLASE
+  ... ESPECIFICIDAD: 0,1,0 */
+  .dialog-fixed {
+    max-width: 350px;
+  }
+}
+
+/* VERSION DESKTOP */
+@media screen and (min-width: 900px) {
+  /* SELECTOR SIMPLE #1 - CLASE
+  ... ESPECIFICIDAD: 0,1,0 */
+  .event-list {
+    background-color: rgb(0, 0, 0);
+    box-shadow: 0 0 16px rgb(36, 36, 36);
+    left: 80vw;
+  }
+
+  /* SELECTOR SIMPLE #2 - CLASE
+  ... ESPECIFICIDAD: 0,1,0 */
+  .events-button-list {
+    display: block;
+  }
+
+  /* SELECTOR SIMPLE #3 - CLASE
+  ... ESPECIFICIDAD: 0,1,0 */
+  li.events-button-list {
+    background-color: rgb(32, 32, 32);
+  }
+}
